@@ -12,6 +12,7 @@ import { ThemeProvider } from "next-themes";
 import { DarkModeToggle } from "~/components/DarkModeToggle";
 import { FaHome } from "react-icons/fa";
 import { Button } from "~/components/ui/button";
+import { Analytics } from "@vercel/analytics/react"
 
 import "./tailwind.css";
 
@@ -63,6 +64,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
+        <Analytics />
       </body>
     </html>
   );
