@@ -13,4 +13,14 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  resolve: {
+    alias: {
+      "~": "/app",
+    },
+  },
+  server: {
+    watch: {
+      usePolling: true,
+    }
+  },
 });
