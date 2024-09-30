@@ -6,7 +6,7 @@ export default function Index() {
       <div className="max-w-md w-full space-y-8 px-4">
         <div className="text-center">
           <h1 className="text-6xl font-extrabold text-primary mb-2 font-orbitron tracking-wider">LitDex</h1>
-          <p className="text-xl text-muted-foreground">Deep Information For Users & Rooms</p>
+          <p className="text-xl text-muted-foreground">Deep Information of Litmatch</p>
         </div>
         <Search />
       </div>
