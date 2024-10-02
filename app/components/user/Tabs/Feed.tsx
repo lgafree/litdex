@@ -102,13 +102,13 @@ const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
   }, [hasMore, feeds, loadMoreFeeds]);
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <tbody>
             {feeds.map((feed) => (
               <tr key={feed.id}>
-                <td colSpan={3} className="p-2">
+                <td colSpan={3} className="">
                   <Card className="flex flex-col">
                     <CardHeader>
                       <div className="flex items-center space-x-2">
