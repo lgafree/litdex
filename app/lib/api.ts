@@ -3,6 +3,22 @@ import { API_PARAMS } from "~/config";
 
 const BASE_URL = "https://www.ksztagent.com/api/sns/v1/lit";;
 
+export async function getFeed(userId: string, start_ts: string) {
+  const params = {
+    ...API_PARAMS,
+    start_ts: start_ts
+  }
+
+  try {
+    const response = await axios.get(`${BASE_URL}/feed/view/${userId}`, { params });
+    return response.data.data || [];
+  }
+  catch (error) {
+    console.error("Error fetching user feed data:", error);
+    throw new Error("Failed to fetch user feed data");
+  }
+}
+
 export async function getUser(userId: string) {
   const params = {
     ...API_PARAMS

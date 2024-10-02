@@ -4,14 +4,11 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getUser } from "~/lib/api";
-import { escapeHtml, fetchImage } from "~/lib/utils";
+import { escapeHtml, fetchImage, processContent } from "~/lib/utils";
 import { FaMars, FaVenus } from 'react-icons/fa'; 
+import CoverPhoto from "~/components/user/CoverPhoto";
 
-import InfoTab from "~/components/user/InfoTab";
-import FeedTab from "~/components/user/FeedTab";
-import MiscTab from "~/components/user/MiscTab";
-import PartnerTab from "~/components/user/PartnerTab";
-import TransactionsTab from "~/components/user/TransactionsTab";
+import UserTabs from "~/components/user/UserTabs";
 
 export default function UserDetail() {
   const { userId } = useParams();
@@ -54,44 +51,14 @@ export default function UserDetail() {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       {/*header*/}
-      <div className="h-1/6 relative mb-20">
-        {/* cover photo */}
-        <Fragment>
-        {user.cover_photo ? (
-          <div className="w-full h-full bg-gray-300 cursor-pointer" onClick={() => openFullscreen(`${BASE_IMAGE_URL}/${user.cover_photo}`)}>
-            <img 
-              src={`${BASE_IMAGE_URL}/${user.cover_photo}`} 
-              alt="Cover" 
-              className="w-full h-full object-cover cursor-pointer" 
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  // Add your click handler function here
-                }
-              }}
-            />
-          </div>
-        ) : (
-          <div 
-            className="w-full h-full bg-gray-300 cursor-pointer" 
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                // Add your click handler function here
-              }
-            }}
-          />
-        )}
-        </Fragment>
-        {/* cover photo */}
+      <div className="h-1/6 relative mb-20 flex-shrink-0">
+        <CoverPhoto coverPhoto={user.cover_photo} baseImageUrl={BASE_IMAGE_URL} openFullscreen={openFullscreen}/>
 
         {/* avatar */}
         <div className="absolute bottom-0 left-4 transform translate-y-1/2">
-          <div className="w-36 h-36 bg-white rounded-full border-4 border-white overflow-hidden cursor-pointer" onClick={() => openFullscreen(avatar)}>
+          <div className="w-36 h-36 bg-white rounded-full border-2 border-white overflow-hidden cursor-pointer" onClick={() => openFullscreen(avatar)}>
             <img src={avatar} alt={`${user.name}'s avatar`} className="w-full h-full object-cover" />
           </div> 
         </div>
@@ -113,8 +80,8 @@ export default function UserDetail() {
       </div>
       {/*header*/}
 
-      <div className="h-5/6 bg-dark">
-        <div className="mb-6 px-4">
+      <div className="flex-grow flex flex-col overflow-hidden bg-dark">
+        <div className="mb-6 px-4 flex-shrink-0">
           {/* name age gender*/}
           <div className="mt-2">
             <span className="font-bold text-primary rounded" dangerouslySetInnerHTML={{ __html: escapeHtml(user.nickname || '') }}></span>
@@ -151,12 +118,7 @@ export default function UserDetail() {
             {user.bio && (
               <p
                 className="user-bio"
-                dangerouslySetInnerHTML={{
-                  __html: user.bio.replace(
-                    /@\(name:(.*?),id:(.*?)\)/g,
-                    (_, name, id) => `<a href="/user/${id}" class="text-blue-500 hover:underline font-semibold">${name}</a>`
-                  )
-                }}
+                dangerouslySetInnerHTML={{ __html: processContent(user.bio) }}
               />
             )}
           </div>
@@ -174,24 +136,7 @@ export default function UserDetail() {
           {/* tags */}
         </div>
 
-        <Card className="rounded-b-none rounded-t-xl h-full">
-          <CardContent className="p-0">
-            <Tabs defaultValue="info" className="w-full ">
-              <TabsList className="flex w-full rounded-b-none ps-5 overflow-x-auto">
-                <TabsTrigger value="info" className="flex-shrink-0">Info</TabsTrigger>
-                <TabsTrigger value="feed" className="flex-shrink-0">Feed</TabsTrigger>
-                <TabsTrigger value="misc" className="flex-shrink-0">Misc</TabsTrigger>
-                <TabsTrigger value="partner" className="flex-shrink-0">Partner</TabsTrigger>
-                <TabsTrigger value="transactions" className="flex-shrink-0">Transactions</TabsTrigger>
-              </TabsList>
-              <TabsContent value="info"><InfoTab user={user} /></TabsContent>
-              <TabsContent value="feed"><FeedTab /></TabsContent>
-              <TabsContent value="misc"><MiscTab user={user} openFullscreen={openFullscreen} /></TabsContent>
-              <TabsContent value="partner"><PartnerTab /></TabsContent>
-              <TabsContent value="transactions"><TransactionsTab user={user} /></TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+        <UserTabs user={user} userId={userId} openFullscreen={openFullscreen} />
       </div>
 
       {fullscreenImage && (

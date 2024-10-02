@@ -12,10 +12,7 @@ export default function RoomDetail() {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold text-primary">Room Details</h1>
-      <pre className="bg-secondary text-secondary-foreground p-4 rounded-md overflow-auto">
-        {JSON.stringify(room || { id: roomId, error: "Room data not available" }, null, 2)}
-      </pre>
+      <h1 className="text-2xl font-bold text-primary">Under Construction...</h1>
     </div>
   );
 }

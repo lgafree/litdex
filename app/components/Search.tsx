@@ -83,7 +83,7 @@ export function Search() {
           {isLoading ? "Searching..." : "Search"}
         </Button>
       </Form>
-      {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+      {error && <p className="text-red-500 mt-4 text-center">{error}</p>}      
     </div>
   );
 }

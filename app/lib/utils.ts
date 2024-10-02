@@ -41,3 +41,36 @@ export async function fetchImage(imageUrl: string): Promise<string> {
   }
 }
 
+export const formatDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric'
+  });
+}
+
+export const formatEpochToDateTime = (epoch: number) => {
+  const date = new Date(epoch * 1000);
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+};
+
+export function processContent(content: string): string {
+  return content.replace(
+    /@\(name:(.*?),id:(.*?)\)/g,
+    (_, name, id) => `<a href="/user/${escapeHtml(id)}" class="text-blue-500 hover:underline font-semibold">${escapeHtml(name)}</a>`
+  ).replace(/\n/g, '<br>');
+}
+
+export function calculateVotePercentage(votes: number[], totalVotes: number): number[] {
+  if (totalVotes === 0) return votes.map(() => 0);
+  return votes.map(vote => Math.round((vote / totalVotes) * 100));
+}
+

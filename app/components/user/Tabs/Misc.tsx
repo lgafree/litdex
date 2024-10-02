@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { formatEpochToDateTime } from '~/lib/utils';
 
 interface MiscTabProps {
   user: any; // Replace 'any' with a proper user type
@@ -13,7 +14,7 @@ const MiscTab: React.FC<MiscTabProps> = ({ user, openFullscreen }) => {
         <p><strong>Lit Admin: </strong> {user.admin === true ? 'Yes' : 'No'}</p>
         <p><strong>Lit Chatbot: </strong> {user.is_chat_bot === true ? 'Yes' : 'No'}</p>
         <p><strong>On Mic: </strong> {user.on_mic === true ? 'Yes' : 'No'}</p>
-        
+        <p><strong>Last Payment:</strong> {user.last_pay_ts ? formatEpochToDateTime(user.last_pay_ts) : 'Unknown'}</p>
         {/*mood*/}
         {user.mood_status_info && user.mood_status_info.is_show && (
         <Fragment>
@@ -27,7 +28,7 @@ const MiscTab: React.FC<MiscTabProps> = ({ user, openFullscreen }) => {
                 onClick={() => {/* Add your click handler function here */}}
               />
             <span className="mr-1">{user.mood_status_info.mood_name}</span></p>
-            <p><strong>Expiry: </strong> <span>{new Date(user.mood_status_info.expire_time * 1000).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</span></p>
+            <p><strong>Expiry: </strong> <span>{formatEpochToDateTime(user.mood_status_info.expire_time)}</span></p>
         </Fragment>
         )}
         {/*mood*/}
@@ -51,7 +52,7 @@ const MiscTab: React.FC<MiscTabProps> = ({ user, openFullscreen }) => {
                     }}
                 />
                 </div>
-                <p><strong>Expiry:</strong> {new Date(user.frame_expire_time * 1000).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                <p><strong>Expiry:</strong> {formatEpochToDateTime(user.frame_expire_time)}</p>
             </Fragment>
         )}
         {/* frame */}
@@ -63,9 +64,9 @@ const MiscTab: React.FC<MiscTabProps> = ({ user, openFullscreen }) => {
                 <h3 className="text-lg font-semibold mb-2">VIP</h3>
                 <p><strong>Level: </strong> {user.vip_info.level}</p>
                 <p><strong>Status Visibility: </strong> {user.vip_info.show_vip_status === true ? 'Visible' : 'Hidden'}</p>
-                <p><strong>Expiry:</strong> {new Date(user.vip_info.expire_time * 1000).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</p>
-                <p><strong>Checkpoint Expiry:</strong> {new Date(user.vip_info.expire_time_checkpoint * 1000).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</p>
-                <p><strong>Lvl Maintain Remaining: </strong> {new Date(user.vip_info.level_maintain_review_time * 1000).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                <p><strong>Expiry:</strong> {formatEpochToDateTime(user.vip_info.expire_time)}</p>
+                <p><strong>Checkpoint Expiry:</strong> {formatEpochToDateTime(user.vip_info.expire_time_checkpoint)}</p>
+                <p><strong>Lvl Maintain Remaining: </strong> {formatEpochToDateTime(user.vip_info.level_maintain_review_time)}</p>
             </Fragment>
         )}
         {/* vip */}
