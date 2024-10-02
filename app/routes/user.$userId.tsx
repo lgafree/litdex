@@ -51,9 +51,9 @@ export default function UserDetail() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-dark">
       {/*header*/}
-      <div className="h-1/6 relative mb-20 flex-shrink-0">
+      <div className="h-64 relative mb-20 flex-shrink-0">
         <CoverPhoto coverPhoto={user.cover_photo} baseImageUrl={BASE_IMAGE_URL} openFullscreen={openFullscreen}/>
 
         {/* avatar */}
@@ -80,7 +80,7 @@ export default function UserDetail() {
       </div>
       {/*header*/}
 
-      <div className="flex-grow flex flex-col overflow-hidden bg-dark">
+      <div className="flex-grow flex flex-col">
         <div className="mb-6 px-4 flex-shrink-0">
           {/* name age gender*/}
           <div className="mt-2">
