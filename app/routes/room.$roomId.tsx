@@ -28,11 +28,17 @@ export default function RoomDetail() {
       }
 
       const roomData = await getRoom(roomId);
-      const recentChangeRuleData = await getUser(roomData.change_rules_user_id);
-      const recentChangeNameData = await getUser(roomData.change_name_user_id);
+      
+      if (roomData && roomData.change_rules_user_id) {
+        const recentChangeRuleData = await getUser(roomData.change_rules_user_id);
+        setRecentChangeRule(recentChangeRuleData);
+      }
+      
+      if (roomData && roomData.change_name_user_id) {
+        const recentChangeNameData = await getUser(roomData.change_name_user_id);
+        setRecentChangeName(recentChangeNameData);
+      }
 
-      setRecentChangeName(recentChangeNameData);
-      setRecentChangeRule(recentChangeRuleData);
       setRoom(roomData);
 
       try {
@@ -81,23 +87,35 @@ export default function RoomDetail() {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
                 <strong>Recent Change Rules:</strong>
-                <img 
-                  src={recentChangeRule.avatar ? `${BASE_IMAGE_URL}/${recentChangeRule.avatar}` : avatar} 
-                  alt="Recent Change Rules Avatar" 
-                  className="w-16 h-16 rounded-full cursor-pointer" 
-                  onClick={() => openFullscreen(recentChangeRule.avatar ? `${BASE_IMAGE_URL}/${recentChangeRule.avatar}` : avatar)}
-                />
-                <span className="font-bold text-primary rounded" dangerouslySetInnerHTML={{ __html: escapeHtml(recentChangeRule.nickname || '') }}></span>
+                {recentChangeRule ? (
+                  <>
+                    <img 
+                      src={recentChangeRule.avatar ? `${BASE_IMAGE_URL}/${recentChangeRule.avatar}` : avatar} 
+                      alt="Recent Change Rules Avatar" 
+                      className="w-16 h-16 rounded-full cursor-pointer" 
+                      onClick={() => openFullscreen(recentChangeRule.avatar ? `${BASE_IMAGE_URL}/${recentChangeRule.avatar}` : avatar)}
+                    />
+                    <span className="font-bold text-primary rounded" dangerouslySetInnerHTML={{ __html: escapeHtml(recentChangeRule.nickname || '') }}></span>
+                  </>
+                ) : (
+                  <span>No recent changes</span>
+                )}
               </div>
               <div className="flex flex-col space-y-2">
                 <strong>Recent Change Name:</strong>
-                <img 
-                  src={recentChangeName.avatar ? `${BASE_IMAGE_URL}/${recentChangeName.avatar}` : avatar} 
-                  alt="Recent Change Name Avatar" 
-                  className="w-16 h-16 rounded-full cursor-pointer" 
-                  onClick={() => openFullscreen(recentChangeName.avatar ? `${BASE_IMAGE_URL}/${recentChangeName.avatar}` : avatar)}
-                />
-                <span className="font-bold text-primary rounded" dangerouslySetInnerHTML={{ __html: escapeHtml(recentChangeName.nickname || '') }}></span>
+                {recentChangeName ? (
+                  <>
+                    <img 
+                      src={recentChangeName.avatar ? `${BASE_IMAGE_URL}/${recentChangeName.avatar}` : avatar} 
+                      alt="Recent Change Name Avatar" 
+                      className="w-16 h-16 rounded-full cursor-pointer" 
+                      onClick={() => openFullscreen(recentChangeName.avatar ? `${BASE_IMAGE_URL}/${recentChangeName.avatar}` : avatar)}
+                    />
+                    <span className="font-bold text-primary rounded" dangerouslySetInnerHTML={{ __html: escapeHtml(recentChangeName.nickname || '') }}></span>
+                  </>
+                ) : (
+                  <span>No recent changes</span>
+                )}
               </div>
             </div>
           </CardContent>
