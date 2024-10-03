@@ -1,19 +1,18 @@
 import { useParams } from "@remix-run/react";
-import { useState, useEffect, Fragment } from "react";
-import { Card, CardContent } from "~/components/ui/card";
+import { useState, useEffect } from "react";
 import { Badge } from "~/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { getUser } from "~/lib/api";
 import { escapeHtml, fetchImage, processContent } from "~/lib/utils";
 import { FaMars, FaVenus } from 'react-icons/fa'; 
+import { User } from '~/types/user';
 import CoverPhoto from "~/components/user/CoverPhoto";
 
 import UserTabs from "~/components/user/UserTabs";
 
 export default function UserDetail() {
   const { userId } = useParams();
-  const [user, setUser] = useState({});
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [user, setUser] = useState<User>();
+  const [avatar, setAvatar] = useState<string>("👤");
   const BASE_IMAGE_URL = "https://baishan.ksztagent.com/api/sns/v1/lit/image";
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
 
@@ -58,8 +57,15 @@ export default function UserDetail() {
 
         {/* avatar */}
         <div className="absolute bottom-0 left-4 transform translate-y-1/2">
-          <div className="w-36 h-36 bg-white rounded-full border-2 border-white overflow-hidden cursor-pointer" onClick={() => openFullscreen(avatar)}>
-            <img src={avatar} alt={`${user.name}'s avatar`} className="w-full h-full object-cover" />
+          <div 
+            className="w-36 h-36 bg-white rounded-full border-2 border-white overflow-hidden cursor-pointer" 
+            onClick={() => openFullscreen(avatar)}
+            onKeyDown={(e) => e.key === 'Enter' && openFullscreen(avatar)}
+            tabIndex={0}
+            role="button"
+            aria-label={`View ${user.nickname}'s avatar fullscreen`}
+          >
+            <img src={avatar} alt={`${user.nickname}'s avatar`} className="w-full h-full object-cover" />
           </div> 
         </div>
         {/* avatar */}
@@ -106,7 +112,6 @@ export default function UserDetail() {
                 src={`${BASE_IMAGE_URL}/${user.mood_status_info.icon}`} 
                 alt="Mood icon" 
                 className="w-4 h-4 object-cover cursor-pointer inline-block mr-1" 
-                onClick={() => {/* Add your click handler function here */}}
               />
               <span className="mr-1">{user.mood_status_info.mood_name}</span>
             </div>
@@ -140,7 +145,13 @@ export default function UserDetail() {
       </div>
 
       {fullscreenImage && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={closeFullscreen}>
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" 
+          onClick={closeFullscreen}
+          onKeyDown={(e) => e.key === 'Escape' && closeFullscreen()}
+          role="button"
+          tabIndex={0}
+        >
           <img src={fullscreenImage} alt="Fullscreen" className="max-w-full max-h-full object-contain" />
         </div>
       )}

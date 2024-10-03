@@ -13,14 +13,15 @@ import { FaHeart, FaComment, FaRetweet, FaThumbtack, FaSpotify, FaMapMarkerAlt }
 import { Feed } from '~/types/feed';
 import { getFeed } from '~/lib/api';
 import { formatEpochToDateTime, processContent, calculateVotePercentage } from '~/lib/utils';
+import { Progress } from "~/components/ui/progress";
 
 interface FeedTabProps {
-  userId: any;
+  userId: string;
   openFullscreen: (imageUrl: string) => void;
 }
 
 const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
-  const [pinned, setPinned] = useState();
+  const [pinned, setPinned] = useState<Feed>();
   const [feeds, setFeeds] = useState<Feed[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [nextStart, setNextStart] = useState<string>('')
@@ -48,7 +49,7 @@ const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
         setPinned(result?.pinned);
 
         if (result?.pinned) {
-          initialFeeds = initialFeeds.filter(feed => feed.id !== result.pinned.id);
+          initialFeeds = initialFeeds.filter((feed: {id: string}) => feed.id !== result.pinned.id);
           initialFeeds = [{ ...result.pinned, pinned: true }, ...initialFeeds];
         }
 
@@ -71,7 +72,7 @@ const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
       let newFeeds = result.feeds;
 
       if (pinned) {
-        newFeeds = newFeeds.filter(feed => feed.id !== pinned.id);
+        newFeeds = newFeeds.filter((feed: {id: string}) => feed.id !== pinned.id);
       }
 
       setFeeds((prev) => [...prev, ...newFeeds]);
@@ -108,7 +109,7 @@ const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
           <tbody>
             {feeds.map((feed) => (
               <tr key={feed.id}>
-                <td colSpan={3} className="">
+                <td colSpan={3} className="p-2">
                   <Card className="flex flex-col">
                     <CardHeader>
                       <div className="flex items-center space-x-2">
@@ -237,13 +238,16 @@ const FeedTab: React.FC<FeedTabProps> = ({ userId, openFullscreen }) => {
                               {feed.vote_options?.map((option, index) => {
                                 const percentages = calculateVotePercentage(feed.votes, feed.vote_num);
                                 return (
-                                  <div key={index} className="flex p-1 rounded-sm bg-gray-300 dark:bg-gray-800 justify-between mt-2">
-                                    <span className="text-xs">{String.fromCharCode(65 + index)}. {option}</span>
-                                    <span className="text-xs">{percentages[index]}%</span>
+                                  <div key={index} className="mt-2">
+                                    <div className="flex justify-between text-xs mb-1">
+                                      <span>{String.fromCharCode(65 + index)}. {option}</span>
+                                      <span>{percentages[index]}%</span>
+                                    </div>
+                                    <Progress value={percentages[index]} className="h-2" />
                                   </div>
                                 );
                               })}
-                              <div className="text-center mt-1 text-xs text-gray-600 dark:text-gray-400">
+                              <div className="text-center mt-3 text-xs text-gray-600 dark:text-gray-400">
                                 Total votes: {feed.vote_num}
                               </div>
                             </div>

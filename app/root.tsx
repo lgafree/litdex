@@ -46,17 +46,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="min-h-screen flex flex-col">
-            {!isHomePage && (
-              <div className="fixed top-4 left-4 z-50">
+            <div className="fixed top-0 left-0 right-0 z-50 bg-transparent flex justify-between p-4">
+              {!isHomePage && (
                 <Button asChild variant="outline" size="icon">
                   <Link to="/">
                     <FaHome className="w-4 h-4" />
                     <span className="sr-only">Home</span>
                   </Link>
                 </Button>
-              </div>
-            )}
-            <div className="fixed top-4 right-4 z-50">
+              )}
               <DarkModeToggle />
             </div>
             <main className="flex-grow">

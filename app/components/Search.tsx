@@ -30,10 +30,10 @@ export function Search() {
           } else {
             setError("No user found");
           }
-        } else {
+        } else if (searchType === "rooms") {
           result = await searchRooms(query);
           if (result.length > 0) {
-            navigate(`/room/${result[0].user_id}`, { state: { room: result[0] } });
+            navigate(`/room/${result[0].id}`, { state: { room: result[0] } });
           } else {
             setError("No room found");
           }

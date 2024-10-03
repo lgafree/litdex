@@ -3,7 +3,7 @@ export interface Feed {
   audios: string[];
   comment_num: number;
   content: string;
-  coordinates: any[];
+  coordinates: number[];
   create_time: {
     time: number;
     time_desc: string;
@@ -36,7 +36,7 @@ export interface Feed {
   repost_num: number;
   similar_feeds: any[];
   source: string;
-  tags: any[];
+  tags: string[];
   user_id: string;
   user_info: {
     age: number;
@@ -65,4 +65,8 @@ export interface Feed {
     last_pay_ts: number;
     // Add other necessary fields
   };
+  vote_num: number;
+  vote_options: string[];
+  vote_topic: string;
+  votes: number[];
 }
